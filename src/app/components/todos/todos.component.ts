@@ -15,17 +15,15 @@ import { AddTodoComponent } from '../add-todo/add-todo.component';
 export class TodosComponent implements OnInit {
 
   todos: Todo[];
-
+  localItem : string | null;
   constructor() {
-    this.todos = [
-      {
-        sno: 0,
-        title: "demo",
-        desc: "Description 1",
-        active: true
-
-      }
-    ]
+    this.localItem =localStorage.getItem("todos") ;
+    if(this.localItem == null){
+      this.todos= [];
+    }
+    else{
+      this.todos = JSON.parse(this.localItem);
+    }
   }
 
   ngOnInit(): void {
@@ -37,9 +35,12 @@ export class TodosComponent implements OnInit {
     const  index=this.todos.indexOf(todo);
     this.todos.splice(index,1);
     console.log(todo,"deleted successfully ..");
+    localStorage.setItem("todos",JSON.stringify(this.todos));
+
   }
 
   addTodo(todo:Todo){
     this.todos.push({...todo});
+    localStorage.setItem("todos",JSON.stringify(this.todos));
   }
 }
